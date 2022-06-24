@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+
+    <link rel="stylesheet" href="main.css" type="text/css" media="all">
+
+    <script src="capture.js">
+    </script>
+
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-lg-end text-white">emperors</h1>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+
+<main>
+
+    <section>
+        <h2 class="text-center"> Искуственный интеллект для определения эмоций учащихся </h2>
+    </section>
+
+
+    <section class="container">
+        <div class="row">
+
+            <div class="col-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" width="400" height="250" src="http://www.youtube.com/embed/T7bYf4-t7Qs" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="col-8">
+                <h2>Какой-то заголовок</h2>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aliquid consequatur consequuntur cupiditate deleniti dicta dolores illum laboriosam, maiores, mollitia nulla officiis repellat saepe sapiente tempore? Asperiores qui similique voluptatibus.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, blanditiis cum esse, minus nesciunt odio optio, quibusdam quis repellat repellendus rerum sit voluptate. Dolores eveniet minus non obcaecati quis suscipit!
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="container">
+
+        <div class="row">
+            <div class="images-cor col-5">
+                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">-->
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" width="300" height="300" src="/img/download.jpeg" alt="First slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" width="300" height="300" src="/img/images.jpeg" alt="Second slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" width="300" height="300" src="/img/promedole.jpg" alt="Third slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" width="300" height="300" src="/img/Yb6KBK5AEAI.jpg" alt="Third slide">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <span>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias consequatur dolor, dolore earum enim explicabo fugit inventore laboriosam magni maiores molestias necessitatibus nesciunt odio omnis sit tempora ut! Officia, vero.
+            </span>
+        </div>
+
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                <span>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquid architecto asperiores consequatur dolores et ex facilis fuga id, in ipsa itaque minus modi molestiae non quaerat quas reprehenderit similique!
+                </span>
+                </div>
+                <div class="col-8">
+
+                    <form>
+                        <div class="mb-3">
+                            <label for="urlInput" class="form-label">Ссылка на видео</label>
+                            <input type="url" class="form-control" id="urlInput">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Password</label>
+                            <input type="file" class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+
+
+<!--<div class="contentarea">-->
+<!--    <h2>-->
+<!--        Вебкамера-->
+<!--    </h2>-->
+<!--    <div class="camera">-->
+<!--        <video id="video">Video stream not available.</video>-->
+<!--        <button id="startbutton">Take photo</button>-->
+<!--    </div>-->
+<!--    <canvas id="canvas">-->
+<!--    </canvas>-->
+<!--    <div class="output">-->
+<!--        <img id="photo" alt="The screen capture will appear in this box.">-->
+<!--    </div>-->
+<!--</div>-->
+
+
+
+<div>
+
+    <button id='request'>
+        Request Camera
+    </button>
+    <button id='start'>
+        Start Recording
+    </button>
+    <button id='stop'>
+        Stop Recording
+    </button>
+    <ul id='ul'>
+        Downloads List:
+    </ul>
+
+</div>
+<video id='video' autoplay></video>
+
+
+<script>
+
+    var video, reqBtn, startBtn, stopBtn, ul, stream, recorder;
+    video = document.getElementById('video');
+    reqBtn = document.getElementById('request');
+    startBtn = document.getElementById('start');
+    stopBtn = document.getElementById('stop');
+    ul = document.getElementById('ul');
+    reqBtn.onclick = requestVideo;
+    startBtn.onclick = startRecording;
+    stopBtn.onclick = stopRecording;
+    startBtn.disabled = true;
+    ul.style.display = 'none';
+    stopBtn.disabled = true;
+
+    function requestVideo() {
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        })
+            .then(stm => {
+                stream = stm;
+                reqBtn.style.display = 'none';
+                startBtn.removeAttribute('disabled');
+                video.src = URL.createObjectURL(stream);
+            }).catch(e => console.error(e));
+    }
+
+    function startRecording() {
+        recorder = new MediaRecorder(stream, {
+            mimeType: 'video/mp4'
+        });
+        recorder.start();
+        stopBtn.removeAttribute('disabled');
+        startBtn.disabled = true;
+    }
+
+
+    function stopRecording() {
+        recorder.ondataavailable = e => {
+            ul.style.display = 'block';
+            var a = document.createElement('a'),
+                li = document.createElement('li');
+            a.download = ['video_', (new Date() + '').slice(4, 28), '.webm'].join('');
+            a.href = URL.createObjectURL(e.data);
+            a.textContent = a.download;
+            li.appendChild(a);
+            ul.appendChild(li);
+        };
+        recorder.stop();
+        startBtn.removeAttribute('disabled');
+        stopBtn.disabled = true;
+    }
+
+
+</script>
+
+
+<footer>
+
+</footer>
+
+
+<script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
