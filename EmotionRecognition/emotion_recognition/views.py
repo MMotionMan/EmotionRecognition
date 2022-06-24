@@ -6,4 +6,4 @@ class MainPageView(View):
     template_name = 'emotion_recognition/index.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'emotion_recognition/index.html', context=context)
+        return render(request, 'emotion_recognition/index.html', context={})
