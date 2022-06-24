@@ -17,10 +17,9 @@ from data_loaders import Plain_Dataset, eval_data_dataloader
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 transformation = transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5,),(0.5,))])
-dataset = Plain_Dataset(csv_file=args.data+'/test.csv',img_dir = args.data+'/'+'test/',datatype = 'finaltest',transform = transformation)
-test_loader =  DataLoader(dataset,batch_size=64,num_workers=0)
 
-model = "weight.pt"
+
+model = "/home/igor/code/EmotionRecognition/ml/weights.pt"
 
 net = Deep_Emotion()
 net.load_state_dict(torch.load(model))
@@ -41,7 +40,7 @@ def load_img(path):
 
 
 # Load the cascade
-face_cascade = cv2.CascadeClassifier('cascade_model/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 # To capture video from webcam.
 cap = cv2.VideoCapture(0)
@@ -78,7 +77,7 @@ while True:
 
     cv2.imshow('img', img)
     # Stop if (Q) key is pressed
-    k = cv2.waitKey(30)
+    k = cv2.waitKey(1)
     if k==ord("q"):
         break
 
