@@ -4,8 +4,8 @@ from torchvision import transforms
 from ml.deep_emotion import Deep_Emotion
 from ml.processing import VideoProcesser, FrameProcesser, get_answer
 
-from multiprocessing import Process
-from collections import deque
+from multiprocessing import Process, Queue
+
 
 import cv2
 import os
@@ -40,7 +40,7 @@ class State:
             model = Deep_Emotion()
             model.to('cpu')
             model.load_state_dict(
-                torch.load("/home/igor/code/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
+                torch.load("/home/emperornao/projects/EmotionRecognition/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
             model.eval()
 
             transformation = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
@@ -48,30 +48,31 @@ class State:
                 cv2.resize(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), (48, 48))).float().unsqueeze(0))
 
             self.is_rt_processing = True
-            self.q_frames = deque()
-            self.q_emotions = deque()
+            self.q_frames = Queue()
+            self.q_emotions = Queue()
 
             p = Process(target=self.rt_frame_processing)
             p.start()
 
     def rt_frame_processing(self):
 
+        import time
         while self.is_rt_processing:
-            if not self.q_frames:
+            if self.q_frames.empty():
                 continue
-            frame = np.array(self.q_frames.popleft().split()).reshape((800, 500, 3))
+            frame = np.array(list(map(int, self.q_frames.get().split())), dtype=np.uint8).reshape((800, 512, 3))
             print(frame.shape, frame[0])
             emotion = get_answer(self.processor.run(frame))
             print("emotion {}" % emotion)
-            self.q_emotions.append(emotion)
+            self.q_emotions.put(emotion)
 
     def processing_first_mode(self):
         print("YAHOOO")
-        path = '/home/igor/code/EmotionRecognition/EmotionRecognition/media'
+        path = '/home/emperornao/projects/EmotionRecognition/EmotionRecognition/media'
         model = Deep_Emotion()
         model.to('cpu')
         model.load_state_dict(
-            torch.load("/home/igor/code/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu'))
+            torch.load("/home/emperornao/projects/EmotionRecognition/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu'))
         )
         model.eval()
 

@@ -79,7 +79,7 @@ def set_next_frame(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            state.q_frames.append(data['image'])
+            state.q_frames.put(data['image'])
             return JsonResponse(status=200, data={'message': 'all good'})
         except:
             JsonResponse(status=400, data={'message': 'error'})
@@ -89,10 +89,12 @@ def set_next_frame(request):
 
 def get_next_emotion(request):
     error_json = {"is_success": "false"}
-    if request.method == 'GET' and state.q_emotions:
+    if request.method == 'GET' and not state.q_emotions.empty():
         # получаем загруженный файл
-        success_json = {"is_success": "true", "emotion": state.q_emotions.popleft()}
+        success_json = {"is_success": "true", "emotion": state.q_emotions.pop()}
         print("JSON = {}" % success_json)
-        return HttpResponse(success_json, content_type='application/json')
-
-    return HttpResponse(error_json, content_type='application/json')
+        return JsonResponse(status=200, data=success_json)
+    elif not state.is_rt_processing:
+        return JsonResponse(status=400, data={})
+    else:
+        return JsonResponse(status=200, data=error_json)

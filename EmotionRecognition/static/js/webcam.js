@@ -99,14 +99,8 @@ const url_frame_get = "http://localhost:8080/get_next_emotion/";
                 // }).catch(error => console.log(error));
 
                 sendFrames();
-                //
-                let i = 0
-                while (true) {
-                    let emotion = JSON.parse(getEmotion(url_frame_get)).get(emotion);
-                    let a = smile_emotions_codes.get(emotion);
-                    console.log(a)
-                    document.getElementById("emotion-test").innerHTML += a;
-                }
+                get_emotion_threading();
+                //getEmotions_threading()
 
 
                 // imageCapture.grabFrame().then(imageBitmap => {
@@ -139,10 +133,49 @@ function sendFrames() {
             drawCanvas(canvas, imageBitmap);
             sendToServer({"image": canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data.join(" ")},
                 url_frame);
-        }).catch(error => console.log(error));
+        }).catch(error => console.log("error"));
         sendFrames();
     },100);
 }
+
+
+function get_emotion_threading() {
+    console.log("GetEmo")
+    setTimeout(function() {
+
+        ret = getEmotion(url_frame_get)
+        console.log("ret = ",ret)
+        let p = JSON.parse(ret)
+        if (p["is_success"] == "true") {
+            emotion = p["emotion"]
+            console.log("emotion =", emotion)
+            let a = smile_emotions_codes.get(emotion);
+            console.log("a = ", a)
+            document.getElementById("emotion-test").innerHTML += a;
+        }
+        get_emotion_threading();
+    },100);
+}
+
+
+//function getEmotions_threading() {
+//
+//    console.log("SendFrames")
+//    setTimeout(function() {
+//        ret = getEmotion(url_frame_get)
+//        console.log("ret = ",ret)
+//        let p = JSON.parse(ret)
+//        if (p["is_success"] == "true") {
+//            emotion = p["emotion"]
+//            console.log("emotion =", emotion)
+//            let a = smile_emotions_codes.get(emotion);
+//            console.log("a = ", a)
+//            document.getElementById("emotion-test").innerHTML += a;
+//        }
+//        getEmotions_threading();
+//    },100);
+//}
+
 
 function getEmotions(url) {
     var xhr = new XMLHttpRequest();
@@ -195,6 +228,7 @@ function drawCanvas(canvas, img) {
 // "http://localhost:8080/send_frame/"
 
 function sendToServer(obj, url) {
+    console.log("CALL SENDTOSERVER")
     const data = JSON.stringify(obj);
     xhr.open("POST", url, false)
     xhr.setRequestHeader("Content-Type", "application/json")
