@@ -43,6 +43,9 @@ def get_first_mode_result(request):
         else:
             JsonResponse(status=400, data={'emotion': state.final_video_emotion})
 
+    else:
+        JsonResponse(status=200, data={'error': 'not a get request'})
+
 
 def upload_video(request):
     if request.method == 'POST' and request.FILES:

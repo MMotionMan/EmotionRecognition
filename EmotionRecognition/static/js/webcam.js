@@ -147,10 +147,6 @@ function drawCanvas(canvas, img) {
 }
 
 
-// http://localhost:8080/send_mode/ - пост запрос для отправки мода
-// http://localhost:8080/get_first_mode_result/ - get запрос, для получения результата из видео
-
-
 function sendToServer(obj) {
     const data = JSON.stringify(obj);
     xhr.open("POST", "http://localhost:8080/send_frame/", true)
