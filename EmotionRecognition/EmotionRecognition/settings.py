@@ -137,8 +137,12 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8080',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

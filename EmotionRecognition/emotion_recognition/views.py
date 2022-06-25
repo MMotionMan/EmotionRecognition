@@ -14,7 +14,6 @@ class MainPageView(View):
 
 
 def get_frame(request):
-    print('request.body =', request.body)
     data = json.loads(request.body)
     print(data)
     return JsonResponse(data)
