@@ -83,12 +83,20 @@ let xhr = new XMLHttpRequest();
             });
         })
 
-        document.getElementById("make-result-button").addEventListener("click", function () {
+        document.getElementById("make-result-button").addEventListener("click", async function () {
             console.log(mode);
+            var xhr = new XMLHttpRequest();
+            const url = 'http://localhost:8080/get_first_mode_result/';
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, false)
+            let data = null
+            do {
+                xhr.send()
+            } while (xhr.status != 200)
 
-            while () {
-                
-            }
+            console.log(xhr.responseText)
+
+            //sendRequest();
 
             // sendToServer(mode)
         })
@@ -133,6 +141,22 @@ function onGrabFrameButtonClick() {
     //     .catch(error => console.log(error));
 
 }
+
+const res = await axios({
+    method: 'get',
+    url: 'http://localhost:8080/get_first_mode_result/'
+});
+
+
+
+// function makeRequest() {
+//     while ()
+//     var xmlHttp = new XMLHttpRequest();
+//
+//     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+//     xmlHttp.send( null );
+//     return xmlHttp.responseText;
+// }
 
 
 function drawCanvas(canvas, img) {
