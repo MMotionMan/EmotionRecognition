@@ -1,4 +1,5 @@
 import json
+import time
 
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -21,15 +22,20 @@ def get_frame(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            print(data)
             return JsonResponse(status=200, data={'message': 'all good'})
         except:
             JsonResponse(status=400, data={'message': 'error'})
 
 
 def get_mode(request):
+    print(request)
+    print(request.method)
     if request.method == 'POST':
         try:
+            print(request.body)
             data = json.loads(request.body)
+            print(data)
             state.set_mode(data)
             return JsonResponse(status=200, data={'message': 'all good'})
         except:
@@ -37,14 +43,16 @@ def get_mode(request):
 
 
 def get_first_mode_result(request):
+    error_json = 'error'
+
     if request.method == 'GET':
         if state.is_ready:
-            JsonResponse(status=200, data={'emotion': state.final_video_emotion})
+            data = state.final_video_emotion
+            return HttpResponse(data, content_type='application/json')
         else:
-            JsonResponse(status=400, data={'emotion': state.final_video_emotion})
-
+            return HttpResponse(error_json, content_type='application/json')
     else:
-        JsonResponse(status=200, data={'error': 'not a get request'})
+        return HttpResponse(error_json, content_type='application/json')
 
 
 def upload_video(request):

@@ -21,7 +21,7 @@ while True:
     
 
     print(type(img))
-    
+    333
 
     cv2.imshow('img', img)
     # Stop if (Q) key is pressed
@@ -35,12 +35,12 @@ from ml_testing import test_frame_processor_all
 from ml_testing import test_video_processer_emotion
 from ml_testing import test_video_processer_time
 
-# test_frame_processor_all("/home/emperornao/projects/EmotionRecognition/ml/angry.jpg")
+test_frame_processor_all("/home/igor/code/EmotionRecognition/ml/angry.jpg")
 import cv2
 import datetime
   
 
-test_video_processer_time("/home/emperornao/projects/EmotionRecognition/ml/tmp.mp4")  
+#est_video_processer_time("/home/igor/code/EmotionRecognition/ml/tmp.mp4")
 # # create video capture object
 #data = cv2.VideoCapture('/home/emperornao/projects/EmotionRecognition/ml/test.mp4')
   

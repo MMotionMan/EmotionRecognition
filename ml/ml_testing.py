@@ -16,7 +16,7 @@ def prepare():
 	from deep_emotion import Deep_Emotion
 	model = Deep_Emotion()
 	model.to('cpu')
-	model.load_state_dict(torch.load("/home/emperornao/projects/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
+	model.load_state_dict(torch.load("/home/igor/code/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
 	model.eval()
 
 
@@ -28,7 +28,7 @@ def test_frame_processor_one(filename):
 
 	model = Deep_Emotion()
 	model.to('cpu')
-	model.load_state_dict(torch.load("/home/emperornao/projects/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
+	model.load_state_dict(torch.load("/home/igor/code/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
 	model.eval()
 
 
@@ -64,7 +64,7 @@ def test_frame_processor_all(filename):
 
 	model = Deep_Emotion()
 	model.to('cpu')
-	model.load_state_dict(torch.load("/home/emperornao/projects/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
+	model.load_state_dict(torch.load("/home/igor/code/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
 	model.eval()
 
 
@@ -73,7 +73,7 @@ def test_frame_processor_all(filename):
 
 	classes = ('Angry', 'Disgust', 'Fear', 'Happy','Sad', 'Surprise', 'Neutral')
 
-	detector = lambda x: cv2.CascadeClassifier('/home/emperornao/projects/EmotionRecognition/ml/haarcascade_frontalface_default.xml').detectMultiScale(cv2.cvtColor(x, cv2.COLOR_BGR2GRAY), 1.1, 4, flags = cv2.CASCADE_SCALE_IMAGE)
+	detector = lambda x: cv2.CascadeClassifier('/home/igor/code/EmotionRecognition/ml/haarcascade_frontalface_default.xml').detectMultiScale(cv2.cvtColor(x, cv2.COLOR_BGR2GRAY), 1.1, 4, flags = cv2.CASCADE_SCALE_IMAGE)
 	transformation = transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5,),(0.5,))])
 	processor = FrameProcesser("all", model, preprocessor = lambda image: transformation(cv2.resize(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), (48, 48))).float().unsqueeze(0), detector=detector)
 
@@ -124,7 +124,7 @@ def test_video_processer_time(filename):
 
 	model = Deep_Emotion()
 	model.to('cpu')
-	model.load_state_dict(torch.load("/home/emperornao/projects/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
+	model.load_state_dict(torch.load("/home/igor/code/EmotionRecognition/ml/weights.pt", map_location=torch.device('cpu')))
 	model.eval()
 
 	processer = VideoProcesser(model, "timestamptz", 7)

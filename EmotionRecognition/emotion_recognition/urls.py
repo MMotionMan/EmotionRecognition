@@ -9,7 +9,7 @@ urlpatterns = [
     path('', MainPageView.as_view(), name='main'),
     path('send_frame/', csrf_exempt(get_frame)),
     path('upload_video/', upload_video, name='upload_video'),
-    path('send_mode/', get_mode, name='get_mode'),
+    path('send_mode/', csrf_exempt(get_mode)),
     path('get_first_mode_result/', get_first_mode_result)
 ]
 

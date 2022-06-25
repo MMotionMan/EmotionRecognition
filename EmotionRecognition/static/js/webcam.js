@@ -4,7 +4,7 @@ let xhr = new XMLHttpRequest();
 (function() {
     let video = null;
     let click_button = null;
-    let canvas = null;
+let canvas = document.querySelector("#canvas");
     let mediaDevice = null;
     let webcam_stream = null
     let mode = -1;
@@ -43,6 +43,8 @@ let xhr = new XMLHttpRequest();
         video = document.getElementById('video');
 
         //
+        click_button = document.querySelector("#click-photo");
+        canvas = document.querySelector("#canvas");
         // mediaDevice = navigator.mediaDevices.getUserMedia({video: true, audio: false})
         //
         // mediaDevice.then(function(stream) {
@@ -84,21 +86,54 @@ let xhr = new XMLHttpRequest();
         })
 
         document.getElementById("make-result-button").addEventListener("click", async function () {
-            console.log(mode);
-            var xhr = new XMLHttpRequest();
+
+            // const url= "http://localhost:8080/send_frame/";
+
+
+            // imageCapture.grabFrame().then(imageBitmap => {
+            //     const canvas = document.querySelector('#grabFrameCanvas');
+            //     drawCanvas(canvas, imageBitmap);
+            //     sendToServer(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data, url);
+            // }).catch(error => console.log(error));
+            //
+
+
+            // console.log(mode)
             const url = 'http://localhost:8080/get_first_mode_result/';
+            const url_mode = "http://localhost:8080/send_mode/"
+            //
+            sendToServer({"mode": mode}, url_mode)
+
             var xhr = new XMLHttpRequest();
+            // var xhr = new XMLHttpRequest();
             xhr.open('GET', url, false)
             let data = null
-            do {
-                xhr.send()
-            } while (xhr.status != 200)
 
-            console.log(xhr.responseText)
+            xhr.send();
+
+            if (xhr.status != 200) {
+          // обработать ошибку
+                alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+            } else {
+          // вывести результат
+                console.log(xhr.responseText)
+                // alert( xhr.responseText ); // responseText -- текст ответа.
+        }
+
+            // xhr.onload = function() {
+            //   console.log(xhr.response);
+            // };
+
+            // do {
+            //     xhr.send();
+            //     complete.log(2488);
+            // } while (xhr.status != 200)
+
+            // console.log(xhr.statusText)
+            // console.log(xhr.)
 
             //sendRequest();
 
-            // sendToServer(mode)
         })
 
         // navigator.mediaDevices.getUserMedia({video: true, audio: false})
@@ -142,12 +177,6 @@ function onGrabFrameButtonClick() {
 
 }
 
-const res = await axios({
-    method: 'get',
-    url: 'http://localhost:8080/get_first_mode_result/'
-});
-
-
 
 // function makeRequest() {
 //     while ()
@@ -170,10 +199,11 @@ function drawCanvas(canvas, img) {
         x, y, img.width * ratio, img.height * ratio);
 }
 
+// "http://localhost:8080/send_frame/"
 
-function sendToServer(obj) {
+function sendToServer(obj, url) {
     const data = JSON.stringify(obj);
-    xhr.open("POST", "http://localhost:8080/send_frame/", true)
+    xhr.open("POST", url, true)
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.send(data)
 }

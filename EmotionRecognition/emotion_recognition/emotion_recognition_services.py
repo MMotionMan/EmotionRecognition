@@ -3,7 +3,7 @@ class State:
         self.mode = 0
         self.file_name = ''
         self.file_url = ''
-        self.is_ready = False
+        self.is_ready = True
 
         self.emotions = {
             -1: 'none',
@@ -21,9 +21,8 @@ class State:
 
     def set_mode(self, json_data):
         self.mode = json_data['mode']
-
-        if self.mode == 1:
-            self.processing_first_mode()
+        #if self.mode == 1:
+        #    self.processing_first_mode()
 
     def processing_first_mode(self, file_name, file_url):
 
