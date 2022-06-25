@@ -2,8 +2,7 @@ let click_button = document.querySelector("#click-photo");
 let canvas = document.querySelector("#canvas");
 let imageCapture;
 let xhr = new XMLHttpRequest();
-
-
+var mode = -1;
 
 (function() {
     let video = null;
@@ -14,6 +13,32 @@ let xhr = new XMLHttpRequest();
         video = document.getElementById('video');
         click_button = document.querySelector("#click-photo");
         canvas = document.querySelector("#canvas");
+
+        document.getElementById("mode1").addEventListener("click", function () {
+            mode = 1;
+        })
+
+
+        document.getElementById("mode21").addEventListener("click", function () {
+            mode = 21
+        })
+
+        document.getElementById("mode22").addEventListener("click", function () {
+            mode = 22
+        })
+
+        document.getElementById("mode31").addEventListener("click", function () {
+            mode = 31
+        })
+
+        document.getElementById("mode32").addEventListener("click", function () {
+            mode = 32
+        })
+
+
+        document.getElementById("make-result-button").addEventListener("click", function () {
+            sendToServer(mode)
+        })
 
         navigator.mediaDevices.getUserMedia({video: true, audio: false})
             .then(function(stream) {
@@ -49,11 +74,12 @@ function onGrabFrameButtonClick() {
         .then(imageBitmap => {
             const canvas = document.querySelector('#grabFrameCanvas');
             drawCanvas(canvas, imageBitmap);
-            sendFrame(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data);
+            // sendToServer(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data);
         })
         .catch(error => console.log(error));
 
 }
+
 
 function drawCanvas(canvas, img) {
     canvas.width = getComputedStyle(canvas).width.split('px')[0];
@@ -66,11 +92,10 @@ function drawCanvas(canvas, img) {
         x, y, img.width * ratio, img.height * ratio);
 }
 
-function sendFrame(img) {
-    console.log(img)
-    const data = JSON.stringify(img);
+
+function sendToServer(obj) {
+    const data = JSON.stringify(obj);
     xhr.open("POST", "http://localhost:8080/send_frame/", true)
     xhr.setRequestHeader("Content-Type", "application/json")
-    console.log(data)
     xhr.send(data)
 }
