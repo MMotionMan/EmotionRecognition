@@ -14,6 +14,7 @@ class State:
             4: 'sad',
             5: 'surprise',
             6: 'neutral',
+            7: 'noface',
         }
 
         self.final_video_emotion = self.emotions[-1]
@@ -29,12 +30,3 @@ class State:
         # start in thread
         # need get which will use state as data provider
         self.file_name, self.file_url = file_name, file_url
-
-        # if state.is_ready:
-        #     send state.data
-        # else:
-        #     send false
-
-
-
-
