@@ -148,3 +148,7 @@ class VideoProcesser:
 
 		else:
 			raise ValueError("Not valide mode: {mode}".format(mode=self.mode))
+
+
+def get_answer(probabilities):
+	return torch.argmax(probabilities, 1)

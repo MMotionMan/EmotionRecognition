@@ -1,12 +1,13 @@
 import json
-import time
 
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 from .emotion_recognition_services import State
+
+from multiprocessing import Process
 
 state = State()
 
@@ -38,8 +39,8 @@ def get_mode(request):
             print(data)
             state.set_mode(data)
             return JsonResponse(status=200, data={'message': 'all good'})
-        except:
-            JsonResponse(status=400, data={'message': 'error'})
+        except BaseException as a:
+            return JsonResponse(status=400, data={'message': 'error'})
 
 
 def get_first_mode_result(request):
@@ -56,14 +57,42 @@ def get_first_mode_result(request):
 
 
 def upload_video(request):
+    success_json = {"is_success": "true"}
+    error_json = {"is_success": "false"}
     if request.method == 'POST' and request.FILES:
         # получаем загруженный файл
         file = request.FILES['myfile1']
         fs = FileSystemStorage()
         # сохраняем на файловой системе
         file_name = fs.save(file.name, file)
-        # получение адреса по которому лежит файл
-        file_url = fs.url(file_name)
+        state.file_name = file_name
 
-        state.processing_first_mode(file_name, file_url)
-        return HttpResponseRedirect('/')
+        p = Process(target=state.processing_first_mode, args=(state,))
+        p.start()
+
+        return redirect('/')
+
+    return HttpResponse(error_json, content_type='application/json')
+
+
+def set_next_frame(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            state.q_frames.append(data['image'])
+            return JsonResponse(status=200, data={'message': 'all good'})
+        except:
+            JsonResponse(status=400, data={'message': 'error'})
+
+    return HttpResponse({"is_success": "false"}, content_type='application/json')
+
+
+def get_next_emotion(request):
+    error_json = {"is_success": "false"}
+    if request.method == 'GET' and state.q_emotions:
+        # получаем загруженный файл
+        success_json = {"is_success": "true", "emotion": state.q_emotions.popleft()}
+        print("JSON = {}" % success_json)
+        return HttpResponse(success_json, content_type='application/json')
+
+    return HttpResponse(error_json, content_type='application/json')

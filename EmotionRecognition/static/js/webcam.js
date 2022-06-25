@@ -1,19 +1,21 @@
 let imageCapture;
 let xhr = new XMLHttpRequest();
 const url = 'http://localhost:8080/get_first_mode_result/';
-const url_mode = "http://localhost:8080/send_mode/"
+const url_mode = "http://localhost:8080/send_mode/";
+const url_frame = "http://localhost:8080/set_next_frame/";
+const url_frame_get = "http://localhost:8080/get_next_emotion/";
+
 
 
 (function() {
     let video = null;
     let click_button = null;
-let canvas = document.querySelector("#canvas");
+    let canvas = null;
     let mediaDevice = null;
     let webcam_stream = null
     let mode = -1;
 
     let emotions = new Map();
-
     emotions.set("none", "None");
     emotions.set("angry", "Angry");
     emotions.set("disgust", "Disgust");
@@ -24,7 +26,6 @@ let canvas = document.querySelector("#canvas");
     emotions.set("noface", "NoFace");
 
     let smile_emotions_codes = new Map();
-
     smile_emotions_codes.set("none", "&#x1F921");
     smile_emotions_codes.set("angry", "&#x1F621");
     smile_emotions_codes.set("disgust", "&#x1F922");
@@ -36,9 +37,7 @@ let canvas = document.querySelector("#canvas");
 
 
 
-
     function turnOnWebcam() {
-
         mediaDevice = navigator.mediaDevices.getUserMedia({video: true, audio: false});
         mediaDevice.then(function(stream) {
             video.srcObject = stream;
@@ -57,25 +56,8 @@ let canvas = document.querySelector("#canvas");
 
     function startup() {
         video = document.getElementById('video');
-
-        //
         click_button = document.querySelector("#click-photo");
         canvas = document.querySelector("#canvas");
-        // mediaDevice = navigator.mediaDevices.getUserMedia({video: true, audio: false})
-        //
-        // mediaDevice.then(function(stream) {
-        //     video.srcObject = stream;
-        //     webcam_stream = stream
-        //     video.width = 800;
-        //     video.height = 300;
-        //     video.play();
-        //
-        //     const track = stream.getVideoTracks()[0];
-        //     imageCapture = new ImageCapture(track);
-        // })
-        //     .catch(function(err) {
-        //         console.log("An error occurred: " + err);
-        //     });
 
         document.getElementById("mode1").addEventListener("click", function () {
             mode = 1;
@@ -106,53 +88,71 @@ let canvas = document.querySelector("#canvas");
             sendToServer({"mode": mode}, url_mode)
 
             if (mode == 1) {
-                document.getElementById("emotion-test").innerHTML += smile_emotions_codes.get(getEmotion());
+                // document.getElementById("emotion-test").innerHTML += smile_emotions_codes.get(getEmotion());
             }
 
             if (mode == 21 || mode == 31){
+                // imageCapture.grabFrame().then(imageBitmap => {
+                // const canvas = document.querySelector('#grabFrameCanvas');
+                //     drawCanvas(canvas, imageBitmap);
+                //     sendToServer({"image": canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data}, url_frame);
+                // }).catch(error => console.log(error));
+
+                sendFrames();
+                //
+                let i = 0
+                while (true) {
+                    let emotion = JSON.parse(getEmotion(url_frame_get)).get(emotion);
+                    let a = smile_emotions_codes.get(emotion);
+                    console.log(a)
+                    document.getElementById("emotion-test").innerHTML += a;
+                }
 
 
+                // imageCapture.grabFrame().then(imageBitmap => {
+                //     const canvas = document.querySelector('#grabFrameCanvas');
+                //     drawCanvas(canvas, imageBitmap);
+                //     sendToServer(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data, url);
+                // }).catch(error => console.log(error));
 
             }
-
-            imageCapture.grabFrame().then(imageBitmap => {
-                const canvas = document.querySelector('#grabFrameCanvas');
-                drawCanvas(canvas, imageBitmap);
-                // sendToServer(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data, url);
-            }).catch(error => console.log(error));
-
-
-
-            // console.log(mode)
-            // //
-            // sendToServer({"mode": mode}, url_mode)
-            //
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('GET', url, false)
-            // let data = null
-            // xhr.send();
-            // if (xhr.status != 200) {
-            //     alert( xhr.status + ': ' + xhr.statusText );
-            // } else {
-               // document.getElementById("emotion-test").innerHTML += smile_emotions_codes.get(xhr.responseText);
-            // }
-
-            // document.getElementById("result-tab").disabled = false;
-
-            // let emotion = xhr.responseText;
-
-            document.getElementById("emotion-test").innerHTML += smile_emotions_codes.get("angry");
-
         })
-
     }
-
-
-
     window.addEventListener('load', startup, false);
 })();
 
-function getEmotion() {
+function myLoop() {         //  create a loop function
+  setTimeout(function() {   //  call a 3s setTimeout when the loop is called
+    console.log('hello');   //  your code here
+    i++;                    //  increment the counter
+    if (i < 10) {           //  if the counter < 10, call the loop function
+      myLoop();             //  ..  again which will trigger another
+    }                       //  ..  setTimeout()
+  }, 3000)
+}
+
+function sendFrames() {
+    console.log("SendFrames")
+    setTimeout(function() {
+        imageCapture.grabFrame().then(imageBitmap => {
+            const canvas = document.querySelector('#grabFrameCanvas');
+            drawCanvas(canvas, imageBitmap);
+            sendToServer({"image": canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data.join(" ")},
+                url_frame);
+        }).catch(error => console.log(error));
+        sendFrames();
+    },100);
+}
+
+function getEmotions(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true)
+    let data = null
+    xhr.send();
+    return xhr.responseText;
+}
+
+function getEmotion(url) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, false)
     let data = null
@@ -161,22 +161,21 @@ function getEmotion() {
         return -1;
     } else {
         return xhr.responseText;
-        // document.getElementById("emotion-test").innerHTML += smile_emotions_codes.get(xhr.responseText);
     }
 }
 
 function onGrabFrameButtonClick() {
-    imageCapture.grabFrame()
-        .then(imageBitmap => {
-            sendFrame(imageBitmap);
-        })
-        .catch(error => ChromeSamples.log(error));
+    // imageCapture.grabFrame()
+    //     .then(imageBitmap => {
+    //         sendFrame(imageBitmap);
+    //     })
+    //     .catch(error => ChromeSamples.log(error));
 
     imageCapture.grabFrame()
         .then(imageBitmap => {
             const canvas = document.querySelector('#grabFrameCanvas');
             drawCanvas(canvas, imageBitmap);
-            // sendToServer(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data);
+            sendToServer({"image" : canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data},);
         })
         .catch(error => console.log(error));
 
@@ -197,7 +196,7 @@ function drawCanvas(canvas, img) {
 
 function sendToServer(obj, url) {
     const data = JSON.stringify(obj);
-    xhr.open("POST", url, true)
+    xhr.open("POST", url, false)
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.send(data)
 }
