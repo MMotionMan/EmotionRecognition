@@ -14,8 +14,21 @@ class MainPageView(View):
 
 
 def get_frame(request):
-    data = json.loads(request.body)
-    print(data)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except:
+            JsonResponse({"is_succserful": False})
+        print(data)
+    return JsonResponse(data)
+
+
+def get_mode(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except:
+            JsonResponse({"is_succserful": False})
     return JsonResponse(data)
 
 
@@ -30,4 +43,3 @@ def upload_video(request):
         file_url = fs.url(filename)
         print(filename)
         return HttpResponseRedirect('/')
-

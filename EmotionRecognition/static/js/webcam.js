@@ -93,6 +93,9 @@ function drawCanvas(canvas, img) {
 }
 
 
+// http://localhost:8080/send_mode/
+
+
 function sendToServer(obj) {
     const data = JSON.stringify(obj);
     xhr.open("POST", "http://localhost:8080/send_frame/", true)
