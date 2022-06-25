@@ -11,9 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
 
-
-    <!--    <script src="/js/test.js"></script>-->
-
 <!--    <link rel="stylesheet" href="/css/fontello.css">-->
 </head>
 <body>
@@ -114,46 +111,30 @@
                             <div class="card-header" style="background-color: #000">
 
                                 <ul class="nav nav-tabs card-header-tabs" id="mods">
-
                                     <li class="nav-item" id="mode1">
-                                        <a href="#loaded-video" class="nav-link active" aria-current="page" data-bs-toggle="tab">Загруженное видео</a>
+                                        <a class="nav-link active" href="#loaded-video" aria-current="page" data-bs-toggle="tab">Загруженное видео</a>
                                     </li>
-
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Эмоции лайв</a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#video" id="mode21" class="nav-link" data-bs-toggle="tab">Вебка</a></li>
+                                            <li><a href="#webcam-video" id="mode21" class="nav-link" data-bs-toggle="tab">Вебка</a></li>
                                             <li><a href="#tmp-video" id="mode22" class="nav-link" data-bs-toggle="tab">Видео</a></li>
                                         </ul>
                                     </li>
-
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Квадратики</a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#video" id="mode31" class="nav-link" data-bs-toggle="tab">Вебка</a></li>
+                                            <li><a href="#webcam-video" id="mode31" class="nav-link" data-bs-toggle="tab">Вебка</a></li>
                                             <li><a href="#tmp-video" id="mode32" class="nav-link" data-bs-toggle="tab">Видео</a></li>
                                         </ul>
                                     </li>
-
-<!--                                    <li class="nav-item">-->
-<!--                                        <a href="#webcam-video" id="mode2" class="nav-link" data-bs-toggle="tab">Вебкамера</a>-->
-<!--                                    </li>-->
-
-<!--                                    <li class="nav-item">-->
-<!--                                        <a href="#tmp-video" id="mode3" class="nav-link" data-bs-toggle="tab">Еще что-то</a>-->
-<!--                                    </li>-->
-
                                     <li class="nav-item">
                                         <a href="#result-video" class="nav-link disabled" data-bs-toggle="tab">Результат</a>
                                     </li>
-
                                     <li class="nav-item">
-                                        <input type="submit" id="make-result-button" class="btn btn-success ml-auto mr-1 make-result-button" value="Определить эмоции!">
+                                        <input type="submit" id="make-result-button" class="btn btn-success ml-auto mr-1 make-result-button" style="border-color: black" value="Эмоции!">
                                     </li>
                                 </ul>
-
-<!--                                <button class="btn btn-light" value="Посмореть результат"></button>-->
-
 <!-------------------------------------------------------------------------------------------------------------------->
 <!--                                <div>-->
 <!--                                    <canvas id='grabFrameCanvas'></canvas>-->
@@ -171,7 +152,6 @@
                             <div class="card-body">
                                 <div class="tab-content">
 
-
                                     <div class="tab-pane fade" id="loaded-video">
                                         <div class="camera">
                                             <video id="video1">
@@ -180,9 +160,10 @@
                                         </div>
                                     </div>
 
+
                                     <div class="tab-pane fade" id="webcam-video">
                                         <div class="camera">
-                                            <video id="video">Video stream not available.</video>
+                                            <video id="video"></video>
                                         </div>
                                     </div>
 
@@ -193,6 +174,8 @@
                                             </video>
                                         </div>
                                     </div>
+
+
 
                                     <div class="tab-pane fade" id="result-video">
                                         <div class="camera">

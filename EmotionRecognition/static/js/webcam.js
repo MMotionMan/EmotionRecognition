@@ -1,82 +1,136 @@
-let click_button = document.querySelector("#click-photo");
-let canvas = document.querySelector("#canvas");
 let imageCapture;
 let xhr = new XMLHttpRequest();
-var mode = -1;
 
 (function() {
     let video = null;
     let click_button = null;
     let canvas = null;
+    let mediaDevice = null;
+    let webcam_stream = null
+    let mode = -1;
+
+    let emotions = new Map();
+
+    emotions.set(1, "Angry");
+    emotions.set(2, "Disgust");
+    emotions.set(3, "Fear");
+    emotions.set(4, "Happy");
+    emotions.set(5, "Sad");
+    emotions.set(6, "Surprise");
+    emotions.set(7, "NoFace");
+
+
+
+    function turnOnWebcam() {
+
+        mediaDevice = navigator.mediaDevices.getUserMedia({video: true, audio: false});
+        mediaDevice.then(function(stream) {
+            video.srcObject = stream;
+            webcam_stream = stream
+            video.width = 800;
+            video.height = 300;
+            video.play();
+
+            const track = stream.getVideoTracks()[0];
+            imageCapture = new ImageCapture(track);
+        })
+            .catch(function(err) {
+                console.log("An error occurred: " + err);
+            });
+    }
 
     function startup() {
         video = document.getElementById('video');
-        click_button = document.querySelector("#click-photo");
-        canvas = document.querySelector("#canvas");
+
+        //
+        // mediaDevice = navigator.mediaDevices.getUserMedia({video: true, audio: false})
+        //
+        // mediaDevice.then(function(stream) {
+        //     video.srcObject = stream;
+        //     webcam_stream = stream
+        //     video.width = 800;
+        //     video.height = 300;
+        //     video.play();
+        //
+        //     const track = stream.getVideoTracks()[0];
+        //     imageCapture = new ImageCapture(track);
+        // })
+        //     .catch(function(err) {
+        //         console.log("An error occurred: " + err);
+        //     });
 
         document.getElementById("mode1").addEventListener("click", function () {
             mode = 1;
         })
-
-
         document.getElementById("mode21").addEventListener("click", function () {
-            mode = 21
+            mode = 21;
+            turnOnWebcam();
         })
-
         document.getElementById("mode22").addEventListener("click", function () {
             mode = 22
+            webcam_stream.getTracks().forEach(function(track) {
+                track.stop();
+            });
         })
-
         document.getElementById("mode31").addEventListener("click", function () {
             mode = 31
+            turnOnWebcam();
         })
-
         document.getElementById("mode32").addEventListener("click", function () {
             mode = 32
+            webcam_stream.getTracks().forEach(function(track) {
+                track.stop();
+            });
         })
-
 
         document.getElementById("make-result-button").addEventListener("click", function () {
-            sendToServer(mode)
+            console.log(mode);
+
+            while () {
+                
+            }
+
+            // sendToServer(mode)
         })
 
-        navigator.mediaDevices.getUserMedia({video: true, audio: false})
-            .then(function(stream) {
-                video.srcObject = stream;
-                video.width = 800;
-                video.height = 300;
-                video.play();
-
-                const track = stream.getVideoTracks()[0];
-                imageCapture = new ImageCapture(track);
-
-
-            })
-            .catch(function(err) {
-                console.log("An error occurred: " + err);
-            });
+        // navigator.mediaDevices.getUserMedia({video: true, audio: false})
+        //     .then(function(stream) {
+        //         video.srcObject = stream;
+        //         video.width = 800;
+        //         video.height = 300;
+        //         video.play();
+        //
+        //         const track = stream.getVideoTracks()[0];
+        //         imageCapture = new ImageCapture(track);
+        //
+        //
+        //     })
+        //     .catch(function(err) {
+        //         console.log("An error occurred: " + err);
+        //     });
 
     }
+
+
 
     window.addEventListener('load', startup, false);
 })();
 
 
 function onGrabFrameButtonClick() {
-
     // imageCapture.grabFrame()
     //     .then(imageBitmap => {
     //         sendFrame(imageBitmap);
     //     })
     //     .catch(error => ChromeSamples.log(error));
 
-    imageCapture.grabFrame()
-        .then(imageBitmap => {
-            const canvas = document.querySelector('#grabFrameCanvas');
-            drawCanvas(canvas, imageBitmap);
-            // sendToServer(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data);
-        })
-        .catch(error => console.log(error));
+    // imageCapture.grabFrame()
+    //     .then(imageBitmap => {
+    //         const canvas = document.querySelector('#grabFrameCanvas');
+    //         drawCanvas(canvas, imageBitmap);
+    //         // sendToServer(canvas.getContext('2d').getImageData(0, 0, imageBitmap.width, imageBitmap.height).data);
+    //     })
+    //     .catch(error => console.log(error));
 
 }
 
