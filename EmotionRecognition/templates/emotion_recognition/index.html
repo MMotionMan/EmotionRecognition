@@ -129,8 +129,9 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#result-video" class="nav-link disabled" data-bs-toggle="tab">Результат</a>
+                                        <a href="#result-video" id="result-tab" class="nav-link" data-bs-toggle="tab">Результат</a>
                                     </li>
+
                                     <li class="nav-item">
                                         <input type="submit" id="make-result-button" class="btn btn-success ml-auto mr-1 make-result-button" style="border-color: black" value="Эмоции!">
                                     </li>
@@ -177,13 +178,33 @@
 
 
 
+<!--                                    <div class="tab-pane fade" id="result-emotion-static">-->
+<!--                                        <div id="result-emotion">-->
+<!--                                            <h1 id="emotion-test">-->
+
+<!--                                            </h1>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
+
+
                                     <div class="tab-pane fade" id="result-video">
-                                        <div class="camera">
-                                            <video src="" id="">
-                                                <source src="../../static/img/matrix.mp4">
-                                            </video>
+
+                                        <div id="result-emotion">
+                                            <h1 class="text-dark text-center" id="emotion-test">
+                                                Ваша эмоция -
+                                            </h1>
                                         </div>
+
+<!--                                        <div class="camera">-->
+<!--                                            <video src="" id="">-->
+<!--                                                <source src="../../static/img/matrix.mp4">-->
+<!--                                            </video>-->
+<!--                                        </div>-->
+<!--                                        -->
                                     </div>
+
+
 
                                 </div>
                             </div>
