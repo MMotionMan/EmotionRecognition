@@ -1,3 +1,7 @@
+import json
+
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
 
@@ -7,3 +11,24 @@ class MainPageView(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'emotion_recognition/index.html', context={})
+
+
+def get_frame(request):
+    print('request.body =', request.body)
+    data = json.loads(request.body)
+    print(data)
+    return JsonResponse(data)
+
+
+def upload_video(request):
+    if request.method == 'POST' and request.FILES:
+        # получаем загруженный файл
+        file = request.FILES['myfile1']
+        fs = FileSystemStorage()
+        # сохраняем на файловой системе
+        filename = fs.save(file.name, file)
+        # получение адреса по которому лежит файл
+        file_url = fs.url(filename)
+        print(filename)
+        return HttpResponseRedirect('/')
+
